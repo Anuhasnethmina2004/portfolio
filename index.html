@@ -356,7 +356,7 @@
 
     /* Tech grid */
     .section_tech {
-      padding: 120px 24px;
+      padding: 24px 24px;
       background: #090b12;
     }
     .section_tech-title { text-align: center; margin-bottom: 60px; position: relative; }
@@ -486,6 +486,7 @@
         <li><a href="#home" class="fn-item active">Home</a></li>
         <li><a href="#education" class="fn-item">Education</a></li>
         <li><a href="#about" class="fn-item">About</a></li>
+        <li><a href="#projects" class="fn-item">Projects</a></li>
         <li><a href="#tech" class="fn-item">Tech</a></li>
         <li><a href="#contact" class="fn-item">Contact</a></li>
       </ul>
@@ -753,6 +754,353 @@
         </div>
     </section>
 
+
+
+    <style>
+        /* 
+           CSS STYLES 
+           Placed here for a single-file solution. 
+        */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        :root {
+            --bg-color: #090b12;
+            --card-bg: #141414;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent: #00f2ea; /* Neon Cyan */
+            --accent-dim: rgba(0, 242, 234, 0.1);
+            --gradient: linear-gradient(135deg, #00f2ea 0%, #0080ff 100%);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .projects-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        /* Header */
+        .section-header {
+            margin-bottom: 60px;
+            opacity: 0; /* For animation */
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            margin: 0;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 10px;
+            max-width: 600px;
+        }
+
+        /* Categories */
+        .category-group {
+            margin-bottom: 80px;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+            color: var(--text-main);
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.6s ease;
+        }
+
+        /* Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 25px;
+        }
+
+        /* Card Design */
+        .project-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            text-decoration: none;
+            overflow: hidden;
+            transition: all 0.1s ease-out; /* Fast transition for JS tilt */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 180px;
+            opacity: 0;
+            transform: translateY(30px);
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Hover Effects */
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover {
+            background: var(--accent-dim);
+            border-color: rgba(0, 242, 234, 0.3);
+            box-shadow: 0 0 30px rgba(0, 242, 234, 0.1);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card h3 {
+            color: var(--text-main);
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .arrow-icon {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-muted);
+            transition: 0.3s ease;
+            transform: rotate(-45deg);
+        }
+
+        .project-card:hover .arrow-icon {
+            stroke: var(--accent);
+            transform: rotate(0deg) scale(1.1);
+        }
+
+        .project-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .tags {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Animation Keyframes Helpers */
+        .reveal {
+            opacity: 1 !important;
+            transform: translate(0, 0) !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+
+    <div class="projects-container" id="projects">
+        
+        <!-- Header -->
+        <div class="section-header reveal-on-scroll">
+            <h2>Selected Works</h2>
+            <p>A collection of complex systems, e-commerce platforms, and custom applications I’ve worked on, engineered for performance and scale.</p>
+        </div>
+
+        <!-- Category 1: LMS -->
+        <div class="category-group">
+            <h3 class="category-title reveal-on-scroll">Learning Management Systems</h3>
+            <div class="projects-grid">
+                
+                <a href="https://indeepa.lk" target="_blank" class="project-card reveal-on-scroll tilt-card">
+                    <div>
+                        <h3>Indeepa.lk <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></h3>
+                        <p>Full-featured LMS with a comprehensive student portal, POS-enabled back-office, and multilingual support.</p>
+                    </div>
+                    <div class="tags"><span class="tag">Laravel</span><span class="tag">LMS</span></div>
+                </a>
+
+                <a href="https://ias.lk" target="_blank" class="project-card reveal-on-scroll tilt-card">
+                    <div>
+                        <h3>IAS.lk <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></h3>
+                        <p>Online learning platform specialized in supporting live streaming and recorded class playback.</p>
+                    </div>
+                    <div class="tags"><span class="tag">Education</span><span class="tag">Streaming</span></div>
+                </a>
+
+                <a href="https://www.onlineaccounting.lk/" target="_blank" class="project-card reveal-on-scroll tilt-card">
+                    <div>
+                        <h3>OnlineAccounting.lk <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></h3>
+                        <p>High-availability LMS architecture designed to handle large-scale student management and concurrent users.</p>
+                    </div>
+                    <div class="tags"><span class="tag">High Traffic</span><span class="tag">LMS</span></div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- Category 2: E-commerce -->
+        <div class="category-group">
+            <h3 class="category-title reveal-on-scroll">E-commerce & Business</h3>
+            <div class="projects-grid">
+                
+                <a href="https://www.dsibike.com/en" target="_blank" class="project-card reveal-on-scroll tilt-card">
+                    <div>
+                        <h3>DSI Bikes <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></h3>
+                        <p>Complex B2B & B2C e-commerce platform featuring multilingual support and secure payment gateway integration.</p>
+                    </div>
+                    <div class="tags"><span class="tag">E-commerce</span><span class="tag">B2B/B2C</span></div>
+                </a>
+
+                                <a href="https://washapp.lk" target="_blank" class="project-card reveal-on-scroll tilt-card">
+                    <div>
+                        <h3>WashApp <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></h3>
+                        <p>On-demand laundry and dry-cleaning management system connecting customers with logistics.</p>
+                    </div>
+                    <div class="tags"><span class="tag">Logistics</span><span class="tag">Service</span></div>
+                </a>
+
+                            <a href="https://www.greenvalleyolive.com/" target="_blank" class="project-card reveal-on-scroll tilt-card">
+                    <div>
+                        <h3>Green Valley Olive <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></h3>
+                        <p>Specialized in premium olive oil production and distribution with a focus on quality and sustainability.</p>
+                    </div>
+                    <div class="tags"><span class="tag">E-commerce</span><span class="tag">Service</span></div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- Category 3: Custom Apps -->
+        <div class="category-group">
+            <h3 class="category-title reveal-on-scroll">Custom Systems</h3>
+            <div class="projects-grid">
+                
+                <a href="https://cinesync.io" target="_blank" class="project-card reveal-on-scroll tilt-card">
+                    <div>
+                        <h3>CINEsync <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></h3>
+                        <p>Cinema management and real-time ticketing system handling seat reservations and box office operations.</p>
+                    </div>
+                    <div class="tags"><span class="tag">SaaS</span><span class="tag">Real-time</span></div>
+                </a>
+
+  <a href="https://publicfinance.lk/en" target="_blank" class="project-card reveal-on-scroll tilt-card">
+                    <div>
+                        <h3>PublicFinance.lk <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></h3>
+                        <p>A Laravel-based financial information platform designed for data clarity and accessibility.</p>
+                    </div>
+                    <div class="tags"><span class="tag">Laravel</span><span class="tag">Finance</span></div>
+                </a>
+
+                <a href="https://play.google.com/store/apps/details?id=com.layoutindex.idhikr&hl=en" target="_blank" class="project-card reveal-on-scroll tilt-card">
+                    <div>
+                        <h3>Idhikr <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></h3>
+                        <p>Android prayer tracking mobile application featuring user analytics and robust back-office support.</p>
+                    </div>
+                    <div class="tags"><span class="tag">Android</span><span class="tag">Mobile App</span></div>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. SCROLL REVEAL ANIMATION
+        // Using IntersectionObserver to fade elements in when they enter the viewport
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Add delay based on index for staggered effect
+                    setTimeout(() => {
+                        entry.target.classList.add('reveal');
+                    }, index * 100); 
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // 2. 3D TILT EFFECT
+        // Adds a subtle 3D rotation to cards based on mouse position
+        const cards = document.querySelectorAll('.tilt-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                // Calculate rotation (max 10 degrees)
+                const xRotation = -1 * ((y - rect.height / 2) / rect.height * 10);
+                const yRotation = (x - rect.width / 2) / rect.width * 10;
+
+                // Apply style
+                card.style.transform = `perspective(1000px) scale(1.02) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+                card.style.zIndex = '10';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // Reset styling
+                card.style.transform = 'perspective(1000px) scale(1) rotateX(0) rotateY(0)';
+                card.style.zIndex = '1';
+            });
+        });
+    </script>
+
   <!-- Technologies Section -->
   <section id="tech" class="section_tech">
     <div class="section_tech-title">
@@ -954,3 +1302,4 @@
   </script>
 </body>
 </html>
+
