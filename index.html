@@ -58,6 +58,46 @@
       gap: 20px;
       width: 100%;
     }
+    .fn-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+    .fn-toggle:hover {
+      transform: translateY(-1px);
+      border-color: rgba(0, 240, 255, 0.5);
+      background: rgba(0, 240, 255, 0.12);
+    }
+    .fn-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: #fff;
+      border-radius: 4px;
+      position: relative;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .fn-toggle span::before,
+    .fn-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: #fff;
+      border-radius: 4px;
+      transition: transform 0.2s ease;
+    }
+    .fn-toggle span::before { top: -6px; }
+    .fn-toggle span::after { top: 6px; }
     .fn-menu {
       display: flex;
       list-style: none;
@@ -130,7 +170,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 120px 24px 80px;
+      padding: 120px 24px 5px;
       background: #000;
     }
     .binary-rain {
@@ -453,9 +493,19 @@
     /* Responsive */
     @media (max-width: 968px) {
       .fn-nav { width: 95%; padding: 10px 15px; }
-      .fn-menu { gap: 15px; justify-content: center; flex-wrap: wrap; }
-      .fn-nav-bar { flex-wrap: wrap; justify-content: center; }
-      .fn-download { width: 100%; justify-content: center; margin-left: 0; }
+      .fn-nav-bar { flex-wrap: wrap; justify-content: space-between; }
+      .fn-toggle { display: inline-flex; margin-left: auto; }
+      .fn-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        gap: 14px;
+        padding: 8px 0 2px;
+        align-items: center;
+      }
+      .fn-menu li { width: 100%; text-align: center; }
+      .fn-nav.open .fn-menu { display: flex; }
+      .fn-download { display: none; width: 100%; justify-content: center; margin-left: 0; }
       .hero-inner { grid-template-columns: 1fr; gap: 24px; }
       .hero h1 { font-size: 3rem; }
       .hero h1::after { max-width: 260px; }
@@ -472,9 +522,21 @@
       .hero h1::after { max-width: 220px; }
       .hero p { font-size: 1rem; }
       .hero-portrait { max-width: 260px; }
-      .fn-menu { gap: 10px; }
-      .fn-item { font-size: 0.8rem; }
       .fn-nav { width: 100%; left: 50%; transform: translateX(-50%); }
+      .fn-item { font-size: 0.95rem; }
+      .fn-nav.open .fn-menu,
+      .fn-nav.open .fn-download {
+        display: flex;
+      }
+      .fn-nav.open .fn-toggle span {
+        transform: rotate(45deg);
+      }
+      .fn-nav.open .fn-toggle span::before {
+        transform: translateY(6px) rotate(90deg);
+      }
+      .fn-nav.open .fn-toggle span::after {
+        transform: translateY(-6px) rotate(90deg);
+      }
     }
   </style>
 </head>
@@ -482,7 +544,10 @@
 
   <nav class="fn-nav" id="fnNav">
     <div class="fn-nav-bar">
-      <ul class="fn-menu">
+      <button class="fn-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="fnMenu">
+        <span></span>
+      </button>
+      <ul class="fn-menu" id="fnMenu">
         <li><a href="#home" class="fn-item active">Home</a></li>
         <li><a href="#education" class="fn-item">Education</a></li>
         <li><a href="#about" class="fn-item">About</a></li>
@@ -1233,10 +1298,30 @@
       pg.style.height = `${progress * 100}%`;
     }
 
+    function setupMobileNav() {
+      const nav = document.getElementById('fnNav');
+      const toggle = nav ? nav.querySelector('.fn-toggle') : null;
+      const menu = document.getElementById('fnMenu');
+      if (!nav || !toggle || !menu) return;
+
+      toggle.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+
+      menu.addEventListener('click', (event) => {
+        if (event.target && event.target.matches('a')) {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       createBinaryRain();
       setTimeout(type, 800);
       updateEduProgress();
+      setupMobileNav();
       const yearEl = document.getElementById('year');
       if (yearEl) yearEl.textContent = new Date().getFullYear();
     });
@@ -1302,4 +1387,3 @@
   </script>
 </body>
 </html>
-
