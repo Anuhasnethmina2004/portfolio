@@ -161,6 +161,20 @@
       border-color: rgba(0, 240, 255, 0.4);
     }
     .fn-download svg { width: 18px; height: 18px; }
+    .fn-mobile-cta {
+      display: none;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--secondary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+    .fn-nav-spacer {
+      display: none;
+      width: 42px;
+      height: 42px;
+    }
 
     /* Hero */
     .hero {
@@ -492,9 +506,39 @@
 
     /* Responsive */
     @media (max-width: 968px) {
-      .fn-nav { width: 95%; padding: 10px 15px; }
-      .fn-nav-bar { flex-wrap: wrap; justify-content: space-between; }
-      .fn-toggle { display: inline-flex; margin-left: auto; }
+      .fn-nav {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        transform: none;
+        margin: 12px auto 0;
+        width: 95%;
+        padding: 10px 15px;
+      }
+      .fn-nav-bar {
+        display: grid;
+        grid-template-columns: 42px 1fr 42px;
+        grid-template-areas:
+          "spacer cta toggle"
+          "menu menu menu"
+          "download download download";
+        align-items: center;
+        row-gap: 8px;
+      }
+      .fn-nav-spacer { display: block; grid-area: spacer; }
+      .fn-toggle {
+        display: inline-flex;
+        justify-self: end;
+        grid-area: toggle;
+      }
+      .fn-mobile-cta {
+        display: inline-flex;
+        justify-self: center;
+        grid-area: cta;
+        margin: 0;
+        text-align: center;
+      }
       .fn-menu {
         display: none;
         flex-direction: column;
@@ -502,10 +546,18 @@
         gap: 14px;
         padding: 8px 0 2px;
         align-items: center;
+        grid-area: menu;
       }
       .fn-menu li { width: 100%; text-align: center; }
       .fn-nav.open .fn-menu { display: flex; }
-      .fn-download { display: none; width: 100%; justify-content: center; margin-left: 0; }
+      .fn-download {
+        display: none;
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        grid-area: download;
+      }
+      .fn-nav.open .fn-download { display: flex; }
       .hero-inner { grid-template-columns: 1fr; gap: 24px; }
       .hero h1 { font-size: 3rem; }
       .hero h1::after { max-width: 260px; }
@@ -524,10 +576,7 @@
       .hero-portrait { max-width: 260px; }
       .fn-nav { width: 100%; left: 50%; transform: translateX(-50%); }
       .fn-item { font-size: 0.95rem; }
-      .fn-nav.open .fn-menu,
-      .fn-nav.open .fn-download {
-        display: flex;
-      }
+      .fn-nav.open .fn-menu { display: flex; }
       .fn-nav.open .fn-toggle span {
         transform: rotate(45deg);
       }
@@ -544,6 +593,8 @@
 
   <nav class="fn-nav" id="fnNav">
     <div class="fn-nav-bar">
+      <span class="fn-nav-spacer" aria-hidden="true"></span>
+      <span class="fn-mobile-cta">Hire Me</span>
       <button class="fn-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="fnMenu">
         <span></span>
       </button>
@@ -1009,15 +1060,13 @@
         }
     </style>
 
-    <div class="projects-container" id="projects">
+    <!-- <div class="projects-container" id="projects">
         
-        <!-- Header -->
         <div class="section-header reveal-on-scroll">
             <h2>Selected Works</h2>
             <p>A collection of complex systems, e-commerce platforms, and custom applications I’ve worked on, engineered for performance and scale.</p>
         </div>
 
-        <!-- Category 1: LMS -->
         <div class="category-group">
             <h3 class="category-title reveal-on-scroll">Learning Management Systems</h3>
             <div class="projects-grid">
@@ -1049,7 +1098,6 @@
             </div>
         </div>
 
-        <!-- Category 2: E-commerce -->
         <div class="category-group">
             <h3 class="category-title reveal-on-scroll">E-commerce & Business</h3>
             <div class="projects-grid">
@@ -1081,7 +1129,6 @@
             </div>
         </div>
 
-        <!-- Category 3: Custom Apps -->
         <div class="category-group">
             <h3 class="category-title reveal-on-scroll">Custom Systems</h3>
             <div class="projects-grid">
@@ -1113,7 +1160,7 @@
             </div>
         </div>
 
-    </div>
+    </div> -->
 
     <script>
         // 1. SCROLL REVEAL ANIMATION
